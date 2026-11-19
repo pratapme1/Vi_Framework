@@ -23,8 +23,19 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows. To chang
 | exec-presentation | Build an answer-first deck that gets a decision |
 | client-qa | Prepare and rehearse tough client questions |
 | stakeholder-influence | Win honest support for a decision |
+| proposal-and-sow | Write a client proposal or statement of work |
 | pm-review | Brutally review any PM document before it goes out |
 | humanizer | Remove AI patterns from writing |
+
+## Workflows
+
+Type these to run several skills in order. Each pauses for your approval after every phase, and in the terminal saves each phase to `vi-work/<project>/`.
+
+| Command | Runs |
+|---|---|
+| `/vi-framework:client-ask` | Problem framing, AI fit check, business case, then a summary for your engagement lead |
+| `/vi-framework:ai-solution` | AI system design, eval design, responsible AI review, then a short spec |
+| `/vi-framework:meeting-prep` | Stakeholder map, storyline, Q&A rehearsal, then a 30-second version |
 
 ## Install in the terminal (Claude Code)
 
@@ -44,6 +55,23 @@ The plugin ships an output style called **Vi** that applies the house rules to e
 ```
 
 To make it your default in every project, add `"outputStyle": "Vi"` to `~/.claude/settings.json`. Restart Claude Code after installing or updating the plugin so it picks up the style.
+
+## Recommended companions (terminal)
+
+These do specialist jobs better than this kit, so use them alongside it rather than rebuilding them:
+
+- [hamelsmu/evals-skills](https://github.com/hamelsmu/evals-skills): hands-on eval work (error analysis, judge prompts, judge validation). `/plugin marketplace add hamelsmu/evals-skills`
+- [obra/superpowers](https://github.com/obra/superpowers): coding discipline (test-driven development, debugging, code review). Enable it only in coding projects, because its brainstorming skill competes with problem-framing and idea-refine.
+
+## Test the kit
+
+`evals/` holds test cases for `claude plugin eval` (Claude Code 2.1.269 or later). Each case checks that the right skill fires and that the house rules hold, and compares against Claude without the plugin. Runs use your own Claude usage.
+
+```
+claude plugin eval .                 # all cases, 3 runs each with and without the plugin
+claude plugin eval . --runs 1        # quicker, cheaper first pass
+claude plugin eval . --allow-tools WebSearch   # needed for the client-data rule case
+```
 
 ## Use in Claude chat
 

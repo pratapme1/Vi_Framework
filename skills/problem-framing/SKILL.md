@@ -48,15 +48,25 @@ Ask the user for their view of the real problem, plus the 2 to 3 most important 
 ### 3. Separate the problem from the solution
 Requests often arrive as solutions. Ask what decision or action the solution would enable. Then run the "why?" chain yourself on the answers, up to five steps, and show it so the user can correct it. Stop at a cause the team can act on.
 
-### 4. Check the evidence
+### 4. Break the problem down (when it's big or messy)
+For a large or tangled problem, turn the core question into an issue tree: 2 to 4 sub-questions that don't overlap and together cover the whole question, each broken down once more if needed. Then state a first-guess answer (the hypothesis) and the one branch that would prove it wrong fastest, with the data needed to test it. Skip this for a simple, single-cause problem.
+
+```
+Why is supplier onboarding slow? (hypothesis: manual compliance checks)
+- Is the delay before submission? (suppliers slow to send documents)
+- Is the delay in review? (compliance queue, rework)  <- test first: queue time per stage
+- Is the delay after approval? (system setup, access)
+```
+
+### 5. Check the evidence
 Tag only the 2 to 3 claims the recommendation rests on: fact (observed or measured), assumption (believed, not checked) or opinion. Flag any assumption that would change the whole problem if wrong.
 
-### 5. Write the problem statement
+### 6. Write the problem statement
 > [Who] struggles to [do what] because [cause], which costs [impact]. We'll know it's solved when [observable change].
 
 A blank you can't fill is the next thing to find out.
 
-### 6. Worth solving?
+### 7. Worth solving?
 Weigh how often it happens, how much it hurts each time, and how many people it hits. Ask whether it's ours to solve and what happens if we do nothing. Recommend stop, park or proceed, with the reason.
 
 ## Output
@@ -68,7 +78,7 @@ Reply with the problem statement, the recommendation and the cheapest next step,
 ## Problem statement
 ## Who has it (role, rough count, how often)
 ## What it costs today (numbers, with source)
-## Root cause (and the why chain)
+## Root cause (and the why chain or issue tree)
 ## Key claims
 | Claim | Fact / Assumption / Opinion | How to check |
 ## What this is not
@@ -82,3 +92,4 @@ Reply with the problem statement, the recommendation and the cheapest next step,
 - "Users" or "the business" instead of a specific person
 - Impact with no number or no source
 - Options discussed before the problem is agreed
+- An issue tree with overlapping branches, or one with no hypothesis to test

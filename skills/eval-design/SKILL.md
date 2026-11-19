@@ -32,7 +32,7 @@ An eval is the spec for an AI system's behaviour. Without one, every prompt chan
 13. **Lead the team as a coach.** Give each piece of work an owner, outcome, "done when" and deadline. Make feedback specific, private and kind, and credit people by name. Help team members think it through rather than doing their work for them.
 <!-- house-rules:end -->
 
-For this skill: if nobody can say what a good output looks like, say so before designing anything.
+For this skill: if nobody can say what a good output looks like, say so before designing anything. This skill sets the plan and the ship bar. For hands-on work in the terminal (reading traces, writing and validating judge prompts, building review tools), use Hamel Husain's evals-skills plugin if it's installed.
 
 ## Process
 
