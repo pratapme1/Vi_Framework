@@ -12,6 +12,8 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows.
 | idea-refine | Shape and pressure-test an idea |
 | spec-driven-development | Write a spec or PRD before building |
 | planning-and-task-breakdown | Break work into small, ordered tasks |
+| ai-fit-check | Decide whether a problem needs AI, and how much |
+| eval-design | Design evals so you know an AI system works |
 | humanizer | Remove AI patterns from writing |
 | apple-design | Apple-style interface and motion design for the web |
 
