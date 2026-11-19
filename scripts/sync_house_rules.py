@@ -13,7 +13,8 @@ BLOCK = re.compile(r"<!-- house-rules:start -->.*?<!-- house-rules:end -->", re.
 
 canonical = BLOCK.search((ROOT / "HOUSE_RULES.md").read_text()).group(0)
 check = "--check" in sys.argv
-targets = sorted((ROOT / "skills").glob("*/SKILL.md")) + sorted((ROOT / "output-styles").glob("*.md"))
+targets = (sorted((ROOT / "skills").glob("*/SKILL.md")) + sorted((ROOT / "builder" / "skills").glob("*/SKILL.md"))
+           + sorted((ROOT / "output-styles").glob("*.md")))
 bad = []
 
 for path in targets:

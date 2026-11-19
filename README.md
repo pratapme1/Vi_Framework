@@ -41,11 +41,26 @@ Run several skills in order. Each pauses for your approval after every phase. In
 
 In chat, ask for them by name, for example "run the client-ask workflow on this".
 
+## Builder kit (prototypes)
+
+A second plugin, `vi-builder`, for client prototypes. Use the skills in this order:
+
+| Skill | Use it to |
+|---|---|
+| prototype-brief | Write down the one question the prototype must answer, who sees it, the cheapest fidelity, what to fake and the go or stop signal |
+| client-design-context | Capture the client's brand, users and wording once in `DESIGN.md`, so every screen looks like theirs |
+| prototype-variants | Build 3 genuinely different working versions behind a switcher, with a Demo / Worst case / Empty data toggle |
+| ui-review | Check built UI against a precise checklist and the worst realistic data, with file and line findings, before a demo |
+| apple-design | Apple-style motion, gestures, materials and typography for the web |
+
+For deeper design work, these are the best-rated outside kits to pair with it: [pbakaus/impeccable](https://github.com/pbakaus/impeccable) (design vocabulary and audits), [emilkowalski/skills](https://github.com/emilkowalski/skills) (animation and craft) and Vercel's [web interface guidelines](https://github.com/vercel-labs/web-interface-guidelines).
+
 ## Install in the terminal (Claude Code)
 
 ```
 /plugin marketplace add pratapme1/Vi_Framework
 /plugin install vi-framework@vi-framework
+/plugin install vi-builder@vi-framework
 ```
 
 To get updates: `/plugin marketplace update vi-framework`, then restart Claude Code.
@@ -92,15 +107,19 @@ claude plugin eval . --tag routing --tag workflow --tag rules --ablation none --
 
 # the client-data case, which needs web search granted (run it on its own)
 claude plugin eval . --tag rule9 --allow-tools WebSearch --ablation none --judge-model sonnet
+
+# the builder kit
+claude plugin eval ./builder --tag skill --runs 1 --judge-model sonnet --threshold 0.8
 ```
 
 ## Maintaining the kit
 
-- House rules live in `HOUSE_RULES.md` only. After editing, run `python3 scripts/sync_house_rules.py`, and `--check` to confirm every skill and the output style match.
+- House rules live in `HOUSE_RULES.md` only. After editing, run `python3 scripts/sync_house_rules.py`, and `--check` to confirm every skill in both plugins and the output style match.
 - Test cases are generated from `scripts/build_evals.py`. Edit the table there and rerun it.
-- Bump `version` in `.claude-plugin/plugin.json` on every change, or `/plugin marketplace update` won't pick it up.
+- Bump `version` in `.claude-plugin/plugin.json` (and `builder/.claude-plugin/plugin.json` for the builder) on every change, or `/plugin marketplace update` won't pick it up.
 
 ## Credits
 
 - idea-refine, spec-driven-development, planning-and-task-breakdown: adapted from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT)
 - humanizer: adapted from [blader/humanizer](https://github.com/blader/humanizer) (MIT)
+- apple-design and prototype-variants: adapted from [emilkowalski/skills](https://github.com/emilkowalski/skills) (MIT); ui-review's worst-case data method is adapted from its break-ui skill, and its checklist is inspired by Vercel's web interface guidelines

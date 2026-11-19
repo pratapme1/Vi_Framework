@@ -1,6 +1,6 @@
 ---
 name: synthetic-data
-description: Create realistic synthetic data for evals, demos, prototypes or tests when real data is scarce, sensitive or missing edge cases. Use when you need test cases, sample records, fake documents or user queries.
+description: Create realistic synthetic data for evals, demos, prototypes or tests when real data is scarce, sensitive or missing edge cases. Use when you need test cases, sample records, fake documents or user queries. Not for worst-case data on a built screen (use ui-review).
 ---
 
 # Synthetic data

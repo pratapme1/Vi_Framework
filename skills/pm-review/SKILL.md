@@ -1,6 +1,6 @@
 ---
 name: pm-review
-description: Brutally review a written draft the user pastes or names (PRD, spec, deck, email, plan, eval plan, AI design) before it goes out, with a verdict and ranked findings with fixes. Use for "review", "critique", "sanity-check" a document. Not for raw ideas (use idea-refine).
+description: Brutally review a written draft the user pastes or names (PRD, spec, deck, email, plan, eval plan, AI design) before it goes out, with a verdict and ranked findings with fixes. Use for "review", "critique", "sanity-check" a document. Not for raw ideas (use idea-refine) or built UI and prototypes (use ui-review).
 ---
 
 # PM review

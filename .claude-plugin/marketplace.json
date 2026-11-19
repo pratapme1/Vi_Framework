@@ -8,6 +8,11 @@
       "name": "vi-framework",
       "source": "./",
       "description": "Vishnu's PM and AI product skills."
+    },
+    {
+      "name": "vi-builder",
+      "source": "./builder",
+      "description": "Prototype kit: brief, client design context, variants, UI review, Apple-style motion."
     }
   ],
   "description": "Vishnu's PM, AI product and consulting skills with shared house rules."

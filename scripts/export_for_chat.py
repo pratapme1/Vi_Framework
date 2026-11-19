@@ -16,7 +16,7 @@ OUT = ROOT / "dist" / "chat"
 CHAT_FIELDS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
 
 shutil.rmtree(OUT, ignore_errors=True)
-for skill in sorted((ROOT / "skills").glob("*/SKILL.md")):
+for skill in sorted((ROOT / "skills").glob("*/SKILL.md")) + sorted((ROOT / "builder" / "skills").glob("*/SKILL.md")):
     text = skill.read_text()
     match = re.match(r"---\n(.*?)\n---\n", text, re.S)
     kept = [line for line in match.group(1).splitlines()
@@ -24,4 +24,7 @@ for skill in sorted((ROOT / "skills").glob("*/SKILL.md")):
     out = OUT / skill.parent.name / "SKILL.md"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("---\n" + "\n".join(kept) + "\n---\n" + text[match.end():])
+    if "THIRD_PARTY_NOTICES.md" in text:
+        notices = skill.parent.parent.parent / "THIRD_PARTY_NOTICES.md"
+        shutil.copy(notices, out.parent / "THIRD_PARTY_NOTICES.md")
     print(f"exported {skill.parent.name}")

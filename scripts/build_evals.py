@@ -80,6 +80,26 @@ CASES = [
      "It helps the user coach the analyst with specific, private feedback and at least one question for her, rather than rewriting the deck."),
 ]
 
+# Cases for the vi-builder plugin, written to builder/evals/.
+# Run: claude plugin eval ./builder --tag skill --judge-model sonnet
+BUILDER_CASES = [
+    ("brief-before-build", "prototype-brief",
+     "The client wants to see a prototype of an AI assistant that drafts replies to supplier emails for their buyers. Before I build anything, what should this prototype prove?",
+     "It names one yes-or-no question the prototype must answer, picks a low fidelity that still lets the AI's output quality be judged, and sets a continue or stop signal before the session."),
+    ("capture-brand", "client-design-context",
+     "We're starting prototype work for a new UK client in insurance. Set up the design context so the screens look like theirs.",
+     "It asks for the client's brand guide or screenshots instead of guessing colours, plans or writes a DESIGN.md with UK spelling and a contrast check, and marks values as sourced or assumed."),
+    ("three-versions", "prototype-variants",
+     "Build me three different versions of a stock-reconciliation exceptions screen for store managers, as a single HTML file I can flip through.",
+     "The variants differ on a named axis such as what the user sees first or the interaction model, use realistic content rather than lorem ipsum, and include a switcher; the reply ends with a variants table and asks the user to pick."),
+    ("qa-before-demo", "ui-review",
+     "Here's the component I'm demoing to the client tomorrow. Check it before I show it:\n\n<div class='card' onclick='openUser()'><img src='{avatar}'><h3>{name}</h3><p>{count} members</p></div>",
+     "It flags the clickable div and the image with no alt text, tests long names, missing avatars and a count of 1 ('1 members'), gives fixes, and does not rewrite the component before reporting."),
+    ("bottom-sheet-motion", "apple-design",
+     "My prototype has a bottom sheet that slides up with a 250ms CSS transition. It feels stiff when users drag it down to close. How should it move?",
+     "It recommends tracking the finger 1:1 while dragging and a spring that takes the release velocity, explains the principle in plain words, and keeps the prose short with any code separate."),
+]
+
 NEGATIVE = [
     ("no-skill-trivia", "What's the capital of Australia?", None,
      "The reply answers Canberra directly and briefly."),
@@ -180,7 +200,17 @@ def main():
     write(d / "graders" / "one-phase-only.md",
           "---\ntype: tool_used\ntool: Skill\ninput_match: '\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(ai-fit-check|business-case)\"'\nmin: 0\nmax: 0\narm: with-only\n---\n")
 
-    print(f"wrote {len(CASES) + len(NEGATIVE) + 4} cases")
+    builder = ROOT / "builder" / "evals"
+    for child in builder.glob("*") if builder.exists() else []:
+        if child.name != "results":
+            shutil.rmtree(child) if child.is_dir() else child.unlink()
+    for name, skill, text, specific in BUILDER_CASES:
+        d = builder / "skills" / name
+        prompt(d, text, ["skill", skill])
+        skill_fired(d, skill)
+        common_graders(d, specific)
+
+    print(f"wrote {len(CASES) + len(NEGATIVE) + 4} cases, plus {len(BUILDER_CASES)} builder cases")
 
 
 if __name__ == "__main__":
