@@ -1,6 +1,6 @@
 {
   "name": "vi-builder",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Vishnu's prototype kit: a brief that says what the prototype must prove, the client's design context, working variants behind a switcher, a checklist and worst-case data review, and Apple-style motion. Uses the Vi house rules.",
   "author": {
     "name": "pratapme1"
