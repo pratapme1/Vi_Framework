@@ -10,6 +10,7 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows. To chang
 |---|---|
 | problem-framing | Find the real problem behind a request |
 | outcome-definition | Define measurable outcomes, metrics and guardrails |
+| business-case | Size value, cost, payback and risk |
 | idea-refine | Shape and pressure-test an idea |
 | ai-fit-check | Decide whether a problem needs AI, and how much |
 | ai-system-design | Choose the architecture, costs and risks of an AI system |
