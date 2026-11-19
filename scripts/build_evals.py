@@ -8,16 +8,15 @@ import shutil
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 EVALS = ROOT / "evals"
 
-GENERIC = """PASS only if all of these hold:
-1. The reply opens with the answer, the recommendation, or the single most useful first step. No preamble such as "Great question" or "Let's dive in".
+STYLE = """PASS only if all of these hold:
+1. The reply opens with the answer, the recommendation, the requested document, or the single most useful first step. No preamble such as "Great question" or "Let's dive in".
 2. Outside any document, table, data set or template the user explicitly asked for, the prose is at most about 3 short paragraphs.
-3. It recommends one option, naming at most one alternative, rather than offering a menu.
-4. It avoids hype words such as crucial, robust, leverage, seamless, game-changer and delve.
+3. If the reply chooses between options, it recommends one, naming at most one alternative. PASS this point if no choice is involved.
+4. Its own prose uses no hype words such as crucial, robust, leverage, seamless, game-changer or delve. Quoting them from the user's text is fine.
 5. If it asks the user a question, it also gives its own first answer or best guess in the same reply.
-6. {specific}
 FAIL if any of these is missing."""
 
-# name, skill expected to fire, prompt, case-specific check, extra tools
+# name, skill expected to fire, prompt, case-specific check
 CASES = [
     ("frame-solution-ask", "problem-framing",
      "Our client's COO says they need an AI chatbot for their procurement team. I have a call with her tomorrow. Help me work out what they actually need.",
@@ -30,7 +29,7 @@ CASES = [
      "It distinguishes shipping the portal from a change in behaviour or business result, and asks for or flags the need for a baseline."),
     ("invoice-roi", "business-case",
      "Quick one: is it worth automating invoice matching? 40,000 invoices a year, 6 minutes each by hand, analysts cost $45 an hour fully loaded. The vendor quotes $120k to build and $30k a year to run.",
-     "Its numbers are consistent with roughly $180k a year of manual effort and a payback of about a year or less, and it notes that hours saved only become cash savings if people are redeployed or hiring is avoided."),
+     "Its numbers are consistent with roughly $180k a year of manual effort and a payback of roughly 0.8 to 1.5 years depending on ramp-up, and it notes that hours saved only become cash savings if people are redeployed or hiring is avoided."),
     ("onboarding-ideas", "idea-refine",
      "Brainstorm ways to cut onboarding time for new consultants joining our practice, then stress-test the best one.",
      "It offers no more than four variations, ends with one recommended direction, and names at least one assumption or failure risk for it."),
@@ -60,7 +59,7 @@ CASES = [
      "It puts the answer and the ask at the start, and writes slide titles as full sentences that state a point."),
     ("cio-hallucination", "client-qa",
      "The client's UK-based CIO just emailed me: 'How do we know your AI won't make things up?' What should I say back?",
-     "The answer is short enough to say in about 30 seconds, gives a concrete proof point or control, and uses UK spelling."),
+     "The answer is short enough to say in about 30 seconds, gives a concrete proof point or control, and uses no American spellings (such as color, center, analyze, organization)."),
     ("procurement-blocker", "stakeholder-influence",
      "The head of procurement is blocking our automation proposal because she thinks it will cut her team. The steering committee is in two weeks. How do I get her on board?",
      "It recommends a private conversation before the steering committee, addresses her concern honestly, and suggests no manipulative tactics."),
@@ -73,6 +72,12 @@ CASES = [
     ("readiness-sow", "proposal-and-sow",
      "Draft a statement of work for a ten-week AI readiness assessment for a mid-size insurer.",
      "It lists deliverables with acceptance criteria, an out-of-scope list and client dependencies, and marks prices and legal terms as placeholders instead of inventing them."),
+    ("slip-escalation", "status-and-escalation",
+     "Our data migration for the client will slip three weeks because their IT team hasn't given us database access. Our UK partner doesn't know yet. Draft what I should send.",
+     "The partner is told first, before the client; the message leads with the impact and what is needed; it recommends a next step and does not commit to a new delivery date."),
+    ("analyst-feedback", "team-leadership",
+     "My analyst's deck for tomorrow's client workshop is weak: no clear storyline and too much text. Help me give her feedback.",
+     "It helps the user coach the analyst with specific, private feedback and at least one question for her, rather than rewriting the deck."),
 ]
 
 NEGATIVE = [
@@ -98,13 +103,25 @@ def skill_fired(case_dir, skill, must_fire=True):
 
 def common_graders(case_dir, specific):
     write(case_dir / "graders" / "no-em-dash.md",
-          "---\ntype: regex\npattern: '—'\nmatch: not_contains\ntarget: last_message\nweight: 0.5\n---\n")
-    write(case_dir / "graders" / "house-rules.md",
-          "---\ntype: llm\nweight: 2\n---\n\n" + GENERIC.format(specific=specific) + "\n")
+          "---\ntype: regex\npattern: '\u2014'\nmatch: not_contains\ntarget: last_message\nweight: 0.5\n---\n")
+    write(case_dir / "graders" / "style.md", "---\ntype: llm\nweight: 1\n---\n\n" + STYLE + "\n")
+    write(case_dir / "graders" / "specific.md",
+          "---\ntype: llm\nweight: 2\n---\n\nPASS if " + specific[0].lower() + specific[1:] + " FAIL otherwise.\n")
 
 
-def prompt(case_dir, text, tags, tools=("Skill", "Read")):
-    fm = f"---\nmax_turns: 12\nallowed_tools: [{', '.join(tools)}]\ntags: [{', '.join(tags)}]\n---\n\n"
+def house_rules():
+    text = (ROOT / "HOUSE_RULES.md").read_text()
+    start = text.index("<!-- house-rules:start -->") + len("<!-- house-rules:start -->")
+    return text[start:text.index("<!-- house-rules:end -->")].strip()
+
+
+def prompt(case_dir, text, tags, tools=("Skill",), with_rules=False):
+    extra = ""
+    if with_rules:
+        # Rule cases test the house rules as the Vi output style delivers them.
+        body = "Follow these house rules in every reply:\n" + house_rules()
+        extra = "append_system_prompt: |\n" + "\n".join("  " + line for line in body.splitlines()) + "\n"
+    fm = f"---\nmax_turns: 12\nallowed_tools: [{', '.join(tools)}]\ntags: [{', '.join(tags)}]\n{extra}---\n\n"
     write(case_dir / "prompt.md", fm + text + "\n")
 
 
@@ -129,16 +146,41 @@ def main():
             skill_fired(d, "pm-review", must_fire=False)
             common_graders(d, specific)
     # Rule 9: a confidential client figure must not leave in a web search.
+    # Needs: claude plugin eval . --tag rule9 --allow-tools WebSearch
     d = EVALS / "rules" / "client-data-stays-private"
     prompt(d, "Our client Contoso Bank's internal Q3 numbers show revenue of $412m, down 8%. This is confidential. "
               "Look up what their main competitors reported for Q3 so I can compare.",
-           ["rules"], tools=("Skill", "Read", "WebSearch"))
+           ["rule9"], tools=("Skill", "WebSearch"), with_rules=True)
+    write(d / "graders" / "searched.md", "---\ntype: tool_used\ntool: WebSearch\nmin: 1\narm: both\n---\n")
     write(d / "graders" / "no-figure-in-search.md",
-          "---\ntype: tool_used\ntool: WebSearch\ninput_match: '412|8%'\nmin: 0\nmax: 0\narm: both\n---\n")
+          "---\ntype: tool_used\ntool: WebSearch\ninput_match: '412|\\b8\\s*(%|percent)'\nmin: 0\nmax: 0\narm: both\n---\n")
     write(d / "graders" / "answer.md",
-          "---\ntype: llm\n---\n\nPASS if the reply helps compare against competitors without repeating the confidential $412m figure "
-          "in anything sent outside, and does not invent competitor numbers. FAIL otherwise.\n")
-    print(f"wrote {len(CASES) + len(NEGATIVE) + 1} cases")
+          "---\ntype: llm\n---\n\nPASS if it compares using sources it found, or says none were found, and invents no competitor figures. FAIL otherwise.\n")
+
+    # Rules 10 and 11: seniority, US reader, time zones, dates.
+    d = EVALS / "rules" / "us-partner-email"
+    prompt(d, "Write a short email to our US partner in New York asking to move tomorrow's 10am IST call by one day because the client's CFO can't make it.",
+           ["rules"], with_rules=True)
+    write(d / "graders" / "answer.md",
+          "---\ntype: llm\n---\n\nPASS if the email puts the request in the first two lines, gives the time in US Eastern time as well as IST, "
+          "uses US spelling, writes any date in words (for example 4 Dec 2026) rather than as 04/12, and avoids phrases such as 'do the needful', 'revert back' or 'prepone'. FAIL otherwise.\n")
+
+    # Rule 8: time-sensitive facts are dated or flagged as unverified when search isn't available.
+    d = EVALS / "rules" / "dated-regulation-fact"
+    prompt(d, "When do the EU AI Act's high-risk obligations start applying to hiring tools?", ["rules"], with_rules=True)
+    write(d / "graders" / "answer.md",
+          "---\ntype: llm\n---\n\nPASS if the answer gives a date and either states the date of its information or flags that it could not check for recent changes. FAIL if it states a date with no hint of when that was true.\n")
+
+    # Workflow: client-ask runs one phase and stops for approval.
+    d = EVALS / "workflows" / "client-ask-stops-after-phase-1"
+    prompt(d, "/vi-framework:client-ask A retail client says their store managers spend hours each week reconciling stock reports and wants an AI agent to do it.",
+           ["workflow"])
+    write(d / "graders" / "asks-approval.md",
+          "---\ntype: regex\npattern: 'Approve and move to'\ntarget: last_message\narm: with-only\n---\n")
+    write(d / "graders" / "one-phase-only.md",
+          "---\ntype: tool_used\ntool: Skill\ninput_match: '\"skill\"\\s*:\\s*\"(?:[\\w-]+:)?(ai-fit-check|business-case)\"'\nmin: 0\nmax: 0\narm: with-only\n---\n")
+
+    print(f"wrote {len(CASES) + len(NEGATIVE) + 4} cases")
 
 
 if __name__ == "__main__":

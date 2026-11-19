@@ -1,6 +1,9 @@
 {
   "name": "vi-framework",
-  "version": "2.1.0",
-  "description": "Vishnu's PM and AI product skills: problem framing, ideas, specs, planning, writing and design.",
-  "author": { "name": "pratapme1" }
+  "version": "3.0.0",
+  "description": "Vishnu's skills for consulting product work on AI: problem framing, discovery, business cases, AI fit and design, evals, responsible AI, proposals, client communication and team leadership, with shared house rules.",
+  "author": {
+    "name": "pratapme1"
+  },
+  "license": "MIT"
 }
