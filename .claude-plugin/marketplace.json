@@ -1,0 +1,11 @@
+{
+  "name": "vi-framework",
+  "owner": { "name": "pratapme1" },
+  "plugins": [
+    {
+      "name": "vi-framework",
+      "source": "./",
+      "description": "Vishnu's PM and AI product skills."
+    }
+  ]
+}
