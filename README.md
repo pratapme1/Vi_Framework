@@ -16,6 +16,7 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows. To chang
 | ai-system-design | Choose the architecture, costs and risks of an AI system |
 | eval-design | Design evals so you know an AI system works |
 | synthetic-data | Create realistic test and demo data safely |
+| responsible-ai-review | Check regulatory, data, fairness and oversight risks |
 | spec-driven-development | Write a spec or PRD before building |
 | planning-and-task-breakdown | Break work into small, ordered tasks |
 | exec-presentation | Build an answer-first deck that gets a decision |
