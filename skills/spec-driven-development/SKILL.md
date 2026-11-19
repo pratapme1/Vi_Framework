@@ -1,164 +1,66 @@
 ---
-name: "spec-driven-development"
-description: "Write a spec or PRD before building. Use when starting a feature or project, when requirements are vague, or when scoping a V1 or a change to something shipped."
+name: spec-driven-development
+description: Write a PRD or spec once a direction is chosen, covering objective, success criteria, scope, out of scope, risks and AI behaviour. Use before building a feature or project, or when scoping a V1 or a change to something shipped. Not for exploring ideas (use idea-refine) or breaking work into tasks (use planning-and-task-breakdown).
 ---
 
-# Spec-Driven Development
+# Spec-driven development
 
-Source: github.com/addyosmani/agent-skills (MIT), adapted to work on its own in chat and for product work as well as code.
+Source: adapted from github.com/addyosmani/agent-skills (MIT).
 
-Write a structured spec before anything gets built. The spec is the shared source of truth: what we're building, why, and how we'll know it's done.
+Write the spec before anything gets built. It is the shared source of truth: what we're building, why, and how we'll know it's done. Skip it for small, unambiguous changes.
 
-**Skip it for:** one-line fixes, typos, or changes whose requirements are unambiguous and self-contained.
+## House rules
 
-## House rules (apply to everything this skill produces)
+<!-- house-rules:start -->
+1. **Coach, don't replace.** If the user hasn't given their view, ask for it once, and give your own first read in the same turn so the turn is still useful. Don't ask when the user says quick or just tell me, or has already given a view. If earlier work (the problem, the AI fit) is missing, state your assumption in one line and carry on; never make it a blocking step. End with one line naming the reusable rule behind the answer. Say what the user did well only when they made a real attempt.
+2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer, delve), no em dashes, no "not X but Y" contrasts, no one-line closers, no forced groups of three, no "Here's the thing" openers, no bold labels on every line.
+3. **Real outcomes only.** Tie every problem, idea or system to a specific person, a measurable cost and an observable change. If it can't be tied, say so.
+4. **Be honest.** If something is weak, wrong or not worth doing, say so plainly and kindly. Never invent a number or a source.
+5. **Short but complete.** The default reply is the answer in at most 3 short paragraphs, most important point first. Compress the wording, never the content. Include the "so what" and the one reason it's true, so the user can explain it, defend it, or be convinced by it. A template is a document: fill it only when the user asks for it or says yes to "Want the one-pager?". Data, code and requested documents don't count toward the limit. Offer more depth in one line instead of writing it.
+<!-- house-rules:end -->
 
-1. **Coach, don't replace.** Ask for the user's own view before giving yours. Explain why each step matters, so the user can do it alone next time. End with one line on what they did well and one thing to practise.
-2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer), no em dashes, no "not X but Y" contrasts, no bold labels on every line, no closing summaries that repeat the point.
-3. **Real outcomes only.** Every spec must tie to a specific person, a measurable cost and an observable change. If it can't, say so.
-4. **Be honest.** If a requirement is weak, vague or not worth building, say it plainly and kindly.
-5. **Short but complete.** Any summary or answer is at most 2 to 3 short paragraphs, never an essay. Most important point first. Leave nothing important out: compress the wording, not the content. Explain like you would to a smart person outside the field, with the "so what" and the one reason it's true, so the user can explain it, defend it, or be convinced by it. Spec sections stay to one or two lines each. If more depth exists, offer it in one line ("Want the detail on X?") instead of writing it.
+## Process
 
-## The gated workflow
+### 1. Check scope
+If one request bundles several capabilities that could ship and be tested separately (say identity, billing and reporting), propose a short list of modules with their dependencies and build order first, and spec each module separately once it's agreed.
 
-SPECIFY -> PLAN -> TASKS -> BUILD. The human reviews and approves each phase before the next starts.
+### 2. Surface assumptions
+List 3 to 5 assumptions and ask the user to correct them before writing the spec. Never fill an ambiguous requirement silently.
 
-### Phase 0: Scope check (only when needed)
+### 3. Turn vague requirements into testable criteria
+"Make the dashboard faster" becomes "loads in under 2.5 seconds on a typical connection". Check the targets with the user.
 
-Most requests are one capability; skip straight to Specify. Decompose first only when one request bundles several independently testable capabilities (separate users or data, acceptance criteria that cluster into groups that could ship separately).
-
-Then propose a short capability map before writing any spec:
-
-```markdown
-# Capability Map: [Initiative]
-
-| Module id | Responsibility | Depends on |
-|---|---|---|
-| identity | Accounts, sessions, SSO | - |
-| billing | Plans, invoices, payments | identity |
-
-Build order: identity -> billing
-```
-
-Rules: stable kebab-case ids, dependencies point one way (two modules that need each other are one module), contracts live in the provider module's spec. The human approves the map, then each module gets its own spec in build order.
-
-### Phase 1: Specify
-
-1. **Surface assumptions first**, before writing spec content:
-```
-ASSUMPTIONS I'M MAKING:
-1. ...
-2. ...
--> Correct me now or I'll proceed with these.
-```
-Never silently fill in ambiguous requirements.
-
-2. **Ask clarifying questions** until the objective, user, and definition of done are concrete.
-
-3. **Reframe vague requirements as testable success criteria.**
-```
-REQUIREMENT: "Make the dashboard faster"
-SUCCESS CRITERIA:
-- Dashboard loads in < 2.5s on 4G
-- Initial data load < 500ms
--> Are these the right targets?
-```
-
-4. **Write the spec** with this template. For product or business work, the PRD sections matter most; include the technical sections only when software is being built.
+### 4. Write the spec
 
 ```markdown
 # Spec: [Name] - V[N]
-
-## Objective
-[What and why. Who the user is. User stories or acceptance criteria.]
-
-## Success Criteria
-[Specific, testable conditions and metrics]
-
+## Objective (what, why, for whom)
+## Success criteria (specific, testable)
 ## Scope
-[What's in this version]
-
-## Out of Scope (Deferred)
-[The V2 backlog: one line each, what and why deferred]
-
-## Boundaries
-- Always: [...]
-- Ask first: [...]
-- Never: [...]
-
-## Technical (software only)
-[Tech stack with versions; build/test/lint commands; project structure; one code snippet showing style; testing strategy]
-
-## Risks and Dependencies
-[...]
-
-## Open Questions
-[Anything needing human input]
+## Out of scope (deferred, one line each with the reason)
+## Constraints (if software: systems, data, integrations, security, performance)
+## AI behaviour (if AI: ship bar from eval-design, behaviour when the model is unsure, human review point, data sources and permissions)
+## Risks and dependencies
+## Open questions
 ```
 
-5. **Stop after the spec.** Summarize it, list open questions, ask for approval, and end the turn. Do not start planning or building in the same turn.
+Keep each section to one or two lines where possible.
 
-### Phase 2: Plan
+### 5. Stop for approval
+Summarize the spec and its open questions, and ask for approval. Planning starts only after the user approves.
 
-With the approved spec: identify major components and dependencies, set the build order, note risks and mitigations, mark what can run in parallel, and define checkpoints. Use the planning-and-task-breakdown skill for the detail. The human approves the plan.
+## Keeping it alive
 
-### Phase 3: Tasks
+Update the spec first when decisions or scope change. New ideas that arrive mid-build go under Out of scope; re-scoping happens between versions, not during one. A change to something already shipped gets a short delta spec (objective, current behaviour, new behaviour, success criteria, what must not change) rather than an edit of the original. Fold it back into the original once it ships.
 
-Break the plan into tasks that each fit one focused session, with acceptance criteria and a verification step, ordered by dependency:
+## Output
 
-```markdown
-- [ ] Task: [Description]
-  - Acceptance: [What must be true when done]
-  - Verify: [How to confirm]
-```
-
-### Phase 4: Build
-
-One task at a time, checking each against its acceptance criteria.
-
-## Keeping the spec alive
-
-Update the spec first when decisions or scope change, then build. Keep it versioned alongside the work.
-
-## V1 scoping and follow-up changes
-
-- Label every spec with its version. New ideas mid-build go to Out of Scope (Deferred); re-scoping happens between versions, not during one.
-- A change to something already shipped gets its own small delta spec, not an edit of the original:
-
-```markdown
-# Spec Delta: [Change]
-Status: proposed
-## Objective
-## Current Behavior
-## New Behavior
-## Success Criteria (including what must NOT change)
-## Boundaries (only the deltas)
-```
-
-After it ships, fold the outcome into the original spec and set the delta's status to implemented.
-
-## Common rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "This is simple, no spec needed" | Simple work needs a short spec, not none. Two lines of acceptance criteria is fine. |
-| "I'll write it after" | That's documentation. The value is forcing clarity before work starts. |
-| "Requirements will change anyway" | That's why the spec is living. An outdated spec beats no spec. |
-| "The user knows what they want" | Clear requests still hide assumptions. The spec surfaces them. |
-| "Good idea, I'll fold it into this version" | That's how V1 slips. Park it under Deferred. |
+Reply with the objective, the 2 to 3 success criteria, the biggest open question and the assumptions to confirm, in at most 3 short paragraphs. Write the full spec when the user asks or confirms.
 
 ## Red flags
 
-- Building with no written requirements
+- Building with no written success criteria
 - Features appearing that aren't in the spec
-- Writing the spec and starting the plan in the same turn
-- One spec covering several independently testable capabilities
-- Editing a shipped spec instead of writing a delta
-
-## Verification
-
-- [ ] Assumptions were surfaced and confirmed
-- [ ] Success criteria are specific and testable
-- [ ] Boundaries (Always / Ask first / Never) are defined
-- [ ] Deferred ideas are captured, not silently dropped or included
-- [ ] The human approved the spec in a later turn
+- Mid-build ideas added to the current version
+- An AI feature with no ship bar or no "unsure" behaviour
+- Planning started before the spec was approved

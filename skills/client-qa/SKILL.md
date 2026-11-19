@@ -1,85 +1,62 @@
 ---
 name: client-qa
-description: Prepare for and rehearse tough client or stakeholder questions with short, honest, convincing answers. Use before a client meeting, steering committee, pitch or review, or to run a mock Q&A.
+description: Answer or rehearse tough client and stakeholder questions with short, honest, speakable answers. Use for one hard question ("the client asked X, what do I say?") or a mock Q&A before a meeting, pitch or steering committee.
 ---
 
 # Client Q&A
 
-The meeting is usually won or lost in the questions, not the slides. This skill predicts the hard questions and trains short, honest answers the user can give in their own words.
+Most meetings turn on the questions. This skill gives short, honest answers the user can say in their own words, and trains them to handle new questions alone.
 
-## House rules (apply to everything this skill produces)
+## House rules
 
-1. **Coach, don't replace.** The user answers first, in their own words. Then critique and tighten. The goal is that the user can handle new questions alone. End with one line on what they did well and one thing to practise.
-2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer), no em dashes, no "not X but Y" contrasts.
-3. **Real outcomes only.** Every answer ties back to the client's goal.
-4. **Be honest.** Never bluff or invent a number. "I don't know yet" with a plan beats a confident guess.
-5. **Short but complete.** Any explanation is at most 2 to 3 short paragraphs. Each answer is speakable in under 30 seconds. Compress the wording, not the facts. Offer more depth in one line instead of writing it.
+<!-- house-rules:start -->
+1. **Coach, don't replace.** If the user hasn't given their view, ask for it once, and give your own first read in the same turn so the turn is still useful. Don't ask when the user says quick or just tell me, or has already given a view. If earlier work (the problem, the AI fit) is missing, state your assumption in one line and carry on; never make it a blocking step. End with one line naming the reusable rule behind the answer. Say what the user did well only when they made a real attempt.
+2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer, delve), no em dashes, no "not X but Y" contrasts, no one-line closers, no forced groups of three, no "Here's the thing" openers, no bold labels on every line.
+3. **Real outcomes only.** Tie every problem, idea or system to a specific person, a measurable cost and an observable change. If it can't be tied, say so.
+4. **Be honest.** If something is weak, wrong or not worth doing, say so plainly and kindly. Never invent a number or a source.
+5. **Short but complete.** The default reply is the answer in at most 3 short paragraphs, most important point first. Compress the wording, never the content. Include the "so what" and the one reason it's true, so the user can explain it, defend it, or be convinced by it. A template is a document: fill it only when the user asks for it or says yes to "Want the one-pager?". Data, code and requested documents don't count toward the limit. Offer more depth in one line instead of writing it.
+<!-- house-rules:end -->
 
-## Process
+For this skill: every answer must be speakable in under 30 seconds and tie back to the client's goal. "I don't know yet" with a plan beats a confident guess.
 
-### 1. Ask the user first
-"Who is in the room, what do you need from them, and which question are you most worried about?"
+## One question
 
-### 2. Map the audience
-For each person: role, what they care about, and what they fear. Typical patterns:
-- **Finance:** cost, payback, hidden running costs
-- **IT and security:** data, access, integration, who supports it
-- **Business owner:** outcome, timeline, disruption to the team
-- **End users:** more work or less, job impact
-- **Legal and risk:** compliance, liability, audit
+If the user brings a single question: if there's time, ask for their draft answer and then tighten it. If not, give the answer straight away:
+- the answer in one sentence
+- one proof (a number, an example or a reference)
+- a link back to the client's goal
+- the most likely follow-up, with a one-line answer
 
-### 3. Predict the questions
-Write 10 to 15 likely questions across these areas, ranked by how likely and how damaging:
-- Why this, why now, why not do nothing
-- Cost and return
-- Risk, security and data
-- Timeline and effort from their team
-- Why us, and what the alternatives are
-- What happens if it fails or is late
-- For AI: how accurate, what if it makes things up, where our data goes, will it replace people
-- The one question nobody wants asked
+## Meeting prep
 
-### 4. Shape each answer
-- **Answer first,** in one sentence.
-- **One reason or proof:** a number, an example, a reference.
-- **Bridge back** to their goal.
+### 1. Map the room
+For each person, note their role, what they care about and what they fear. Typical patterns: finance (cost, payback, hidden running costs), IT and security (data, access, integration, support), business owner (outcome, timeline, disruption), end users (workload, jobs), legal and risk (compliance, liability, audit).
 
-Use a number when you have it, a range with its source when you don't. Keep each answer under 30 seconds spoken.
+### 2. Predict the questions
+Rank likely questions by how likely and how damaging they are, covering: why this and why now; cost and return; risk, security and data; effort from their team; why us and the alternatives; what if it fails; and for AI, accuracy, made-up answers, where the data goes and impact on jobs. Always include the one question the user fears most.
 
-### 5. Prepare for the hard moments
-- **Don't know:** "I don't have that number today. I'll get it to you by Thursday."
-- **Hostile or sceptical:** acknowledge the concern, restate the shared goal, give evidence. Don't argue.
-- **Out of scope:** acknowledge it, park it with an owner and a date.
-- **Trap question** (a yes/no that hides a bigger issue): answer the real issue in one line.
+### 3. Prepare for hard moments
+- **Don't know:** "I don't have that number today. I'll send it by Thursday."
+- **Sceptical or hostile:** acknowledge the concern, restate the shared goal, give evidence. Don't argue.
+- **Out of scope:** acknowledge it and park it with an owner and a date.
+- **Trap question** (a yes/no hiding a bigger issue): answer the real issue in one line.
 
-### 6. Rehearse
-Mock mode: ask one question at a time, as a sceptical client would, and follow up on weak spots. After each user answer, give brief feedback on clarity, length, proof and honesty, then show a tighter version.
+### 4. Rehearse
+Mock mode: ask one question at a time as a sceptical client would, and follow up on weak spots. After each answer, give brief feedback on clarity, length, proof and honesty, then show a tighter version.
 
 ## Output
 
-A 2 to 3 sentence summary of the three messages that must land, then the Q&A sheet:
+For meeting prep, reply with the three messages that must land and the top 5 questions:
 
-```markdown
-## Messages to land
-1. ...
-2. ...
-3. ...
+| Question | From | Answer (2 sentences max) | Proof | Likely follow-up and answer |
+|---|---|---|---|---|
 
-## Q&A sheet
-### Q1. [Question]  (likely from: [role])
-**Answer:** [One to two sentences]
-**Proof:** [Number, example or source]
-**Follow-ups:**
-- [Likely follow-up] - [short answer]
-
-## Don't-know list
-[Questions with no good answer yet, who will find out, by when]
-```
+Offer the rest of the questions and a don't-know list (open questions, who will find out, by when) in one line.
 
 ## Red flags
 
 - Answers longer than 30 seconds spoken
 - A made-up number or claim
 - Defending instead of answering
-- No answer prepared for the question the user fears most
+- No answer ready for the question the user fears most
 - Only easy questions prepared

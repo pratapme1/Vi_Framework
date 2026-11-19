@@ -1,152 +1,61 @@
 ---
-name: "planning-and-task-breakdown"
-description: "Break a spec or clear requirements into small, ordered tasks with acceptance criteria. Use when work feels too big to start, scope needs estimating, or work can run in parallel."
+name: planning-and-task-breakdown
+description: Break an approved spec or engagement scope into small, ordered tasks or a week-by-week workplan with owners, dependencies and checkpoints. Use when work feels too big to start, scope needs estimating, or work can run in parallel. Not for writing the spec itself (use spec-driven-development).
 ---
 
-# Planning and Task Breakdown
+# Planning and task breakdown
 
-Source: github.com/addyosmani/agent-skills (MIT), adapted to work on its own in chat.
+Source: adapted from github.com/addyosmani/agent-skills (MIT).
 
-Decompose work into small, verifiable tasks with explicit acceptance criteria. Each task should be small enough to do and check in one focused session.
+Break work into small, checkable pieces in the right order, so progress is visible and problems show up early.
 
-**Skip it for:** single changes with obvious scope, or when the spec already has well-defined tasks.
+## House rules
 
-## House rules (apply to everything this skill produces)
-
-1. **Coach, don't replace.** Ask for the user's own view of the order and risks before giving yours. Explain why each step matters, so the user can do it alone next time. End with one line on what they did well and one thing to practise.
-2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer), no em dashes, no "not X but Y" contrasts, no bold labels on every line, no closing summaries that repeat the point.
-3. **Real outcomes only.** Every task must move toward an observable result for a real person. Cut tasks that don't.
-4. **Be honest.** If the plan is too big, too risky or out of order, say it plainly and kindly.
-5. **Short but complete.** Any summary or answer is at most 2 to 3 short paragraphs, never an essay. Most important point first. Leave nothing important out: compress the wording, not the content. Explain like you would to a smart person outside the field, with the "so what" and the one reason it's true, so the user can explain it, defend it, or be convinced by it. Task descriptions stay to one or two lines. If more depth exists, offer it in one line ("Want the detail on X?") instead of writing it.
+<!-- house-rules:start -->
+1. **Coach, don't replace.** If the user hasn't given their view, ask for it once, and give your own first read in the same turn so the turn is still useful. Don't ask when the user says quick or just tell me, or has already given a view. If earlier work (the problem, the AI fit) is missing, state your assumption in one line and carry on; never make it a blocking step. End with one line naming the reusable rule behind the answer. Say what the user did well only when they made a real attempt.
+2. **Plain writing.** Short sentences, everyday words, the answer first. No hype words (crucial, robust, leverage, seamless, game-changer, delve), no em dashes, no "not X but Y" contrasts, no one-line closers, no forced groups of three, no "Here's the thing" openers, no bold labels on every line.
+3. **Real outcomes only.** Tie every problem, idea or system to a specific person, a measurable cost and an observable change. If it can't be tied, say so.
+4. **Be honest.** If something is weak, wrong or not worth doing, say so plainly and kindly. Never invent a number or a source.
+5. **Short but complete.** The default reply is the answer in at most 3 short paragraphs, most important point first. Compress the wording, never the content. Include the "so what" and the one reason it's true, so the user can explain it, defend it, or be convinced by it. A template is a document: fill it only when the user asks for it or says yes to "Want the one-pager?". Data, code and requested documents don't count toward the limit. Offer more depth in one line instead of writing it.
+<!-- house-rules:end -->
 
 ## Process
 
-### 1. Plan before doing
+### 1. Map dependencies
+Find what depends on what. Build foundations first: data before the logic that uses it, logic before the screens on top.
 
-Read the spec or requirements and any existing material. Identify existing patterns, dependencies, risks, and unknowns. Do not start the work itself while planning; the output is a plan and a task list.
+### 2. Slice vertically
+Deliver one complete path at a time, not one layer at a time. "User can register" (data, logic and screen together) beats "build all the database, then all the screens". Each slice is something working that can be shown.
 
-### 2. Map the dependency graph
+### 3. Write the tasks
+Each task fits one focused session or a few days of work, has a clear "done when", and leaves things in a working state. Break a task down further if its "done when" needs more than 3 points, it spans two independent systems, or its title contains "and".
 
-Show what depends on what. Build order follows the graph bottom-up: foundations first.
+### 4. Order and checkpoint
+Dependencies first, highest-risk work early, and a checkpoint every 2 to 3 tasks to review with the user or client.
 
-```
-Data model
-  -> API / integration
-       -> UI or process step
-  -> Migration / seed data
-```
+### 5. For client engagements
+Plan in phases by week. Treat client dependencies (system access, data, expert time, sign-offs) as tasks with owners and dates; these cause most delays. Keep a short RAID list: risks, assumptions, issues, dependencies.
 
-### 3. Slice vertically
+### 6. Parallel work
+Independent slices can run in parallel. Shared contracts (an API, a data model) must be agreed first. Data migrations and shared state run in sequence.
 
-Deliver one complete path at a time, not one layer at a time.
+If the user tracks work in a tool (Jira, Linear, GitHub Issues), map each task to one item there. Never overwrite or close another plan's open tasks without asking.
 
-Bad (horizontal): all the database, then all the API, then all the UI, then connect.
-Good (vertical): user can register (data + API + UI), then user can log in, then user can create an item.
+## Output
 
-Each slice delivers something working and testable.
-
-### 4. Write each task
+Reply with the phases, the first 3 tasks, the riskiest dependency and the first checkpoint, in at most 3 short paragraphs. Offer the full plan in one line. If the user says yes:
 
 ```markdown
-## Task [N]: [Short title]
-
-**Description:** One paragraph on what this accomplishes.
-
-**Acceptance criteria:**
-- [ ] [Specific, testable condition]
-- [ ] [Specific, testable condition]
-
-**Verification:** [How to confirm: test, build, manual check, stakeholder sign-off]
-
-**Dependencies:** [Task numbers, or None]
-
-**Owner:** [If known]
-
-**Size:** [XS / S / M / L]
+## Plan: [Name]
+| # | Task | Done when | Depends on | Owner | Size (S/M/L) |
+## Checkpoints
+## RAID (risks, assumptions, issues, dependencies)
 ```
-
-### 5. Order and checkpoint
-
-1. Dependencies satisfied first
-2. Each task leaves things in a working state
-3. A checkpoint after every 2-3 tasks
-4. Highest-risk tasks early (fail fast)
-
-```markdown
-## Checkpoint: After Tasks 1-3
-- [ ] Everything built so far works end to end
-- [ ] Review with the human before continuing
-```
-
-## Sizing
-
-| Size | Scope | Example |
-|---|---|---|
-| XS | One small change | Add a validation rule |
-| S | One component or step | Add one API endpoint |
-| M | One feature slice | Registration flow |
-| L | Multi-part feature | Search with filters and paging |
-| XL | Too large: break it down | - |
-
-Break a task down further when it needs more than one focused session, its acceptance criteria won't fit in 3 bullets, it spans two independent systems, or its title contains "and".
-
-## Plan template
-
-```markdown
-# Plan: [Name]
-
-Source spec: [link or name, if any]
-
-## Overview
-[One paragraph]
-
-## Key Decisions
-- [Decision and rationale]
-
-## Tasks
-### Phase 1: Foundation
-- [ ] Task 1 ...
-### Checkpoint: Foundation
-### Phase 2: Core
-- [ ] Task 3 ...
-### Checkpoint: Core
-### Phase 3: Polish
-- [ ] Task 5 ...
-### Checkpoint: Complete
-
-## Risks and Mitigations
-| Risk | Impact | Mitigation |
-|---|---|---|
-
-## Open Questions
-```
-
-If the person tracks work in a tool (Jira, Linear, GitHub Issues), map each task to one item there and keep the plan's task list as an index of those items. Never overwrite or close another plan's open tasks without asking.
-
-## Parallel work
-
-- Safe to parallelize: independent slices, tests for finished work, documentation
-- Must be sequential: data migrations, shared state, dependency chains
-- Needs coordination: anything sharing a contract (define the contract first)
-
-## Common rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "I'll figure it out as I go" | That's how rework happens. 10 minutes of planning saves hours. |
-| "The tasks are obvious" | Write them anyway; it surfaces hidden dependencies. |
-| "I can hold it in my head" | Written plans survive across sessions and people. |
 
 ## Red flags
 
-- Tasks like "implement the feature" with no acceptance criteria
-- No verification steps or checkpoints
-- Everything sized L or XL
+- Tasks with no "done when"
+- Everything sized L or bigger
 - Order ignores dependencies
-
-## Verification
-
-- [ ] Every task has acceptance criteria and a verification step
-- [ ] Dependencies are ordered correctly
-- [ ] Checkpoints exist between phases
-- [ ] The human approved the plan
+- Client dependencies missing from the plan
+- No checkpoints
