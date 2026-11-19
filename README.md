@@ -35,6 +35,16 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows. To chang
 
 To get updates later: `/plugin marketplace update vi-framework`
 
+## Turn on the house rules for every answer (terminal)
+
+The plugin ships an output style called **Vi** that applies the house rules to every reply, not only when a skill runs. Turn it on once:
+
+```
+/output-style Vi
+```
+
+To make it your default in every project, add `"outputStyle": "Vi"` to `~/.claude/settings.json`. Restart Claude Code after installing or updating the plugin so it picks up the style.
+
 ## Use in Claude chat
 
 Save each skill to your Claude account so chat and terminal use the same version.
