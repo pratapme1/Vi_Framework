@@ -8,6 +8,7 @@ See [HOUSE_RULES.md](HOUSE_RULES.md) for the rules every skill follows. To chang
 
 | Skill | Use it to |
 |---|---|
+| discovery | Plan, run and synthesise interviews and workshops |
 | problem-framing | Find the real problem behind a request |
 | outcome-definition | Define measurable outcomes, metrics and guardrails |
 | business-case | Size value, cost, payback and risk |
